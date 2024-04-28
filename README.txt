@@ -1,7 +1,7 @@
-Name: 		Bilgehan Yilmaz Sandikci
-ID: 			21902354
+Name: 		  Bilgehan Yilmaz Sandikci
+ID: 			  21902354
 E-mail: 		yilmaz.sandikci@ug.bilkent.edu.tr
-Date: 28.04.2024 21:10
+Date:       28.04.2024 21:10
 
 
 Description:
