@@ -4,7 +4,7 @@ E-mail: 		yilmaz.sandikci@ug.bilkent.edu.tr
 Date: 28.04.2024 21:10
 
 
-Description:
+#Description:
 This is a web app that uses four different convex hull finding algorithms. Namely: Gift-wrap, Graham's scan, Quick-hull, and Merge-hull.
 The app has functionalities about creating & drawing n points using gaussian and normal distribution options, finding the convex hull of these points,
 animating the algorithms and their inner workings while the hull is beings found, and the functionality to add new points by clicking with mouse. The
