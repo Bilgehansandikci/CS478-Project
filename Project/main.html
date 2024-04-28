@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #sidebar {
+      float: left;
+      width: 200px;
+      height: 100vh; 
+      background-color: beige;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Adjustments for button style */
+    #draw-button {
+        display: block;
+        margin-top: 10px;
+    }
+
+    #info-panel {
+      float: right;
+      /*width: 200px; */
+      height: 100vh; 
+      background-color: beige;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #body-style {
+      /*width: 1400px; /* Adjust the width as needed */
+      /*margin: 0 auto; /* Center the body horizontally */
+      overflow: hidden; /* Hide any content that exceeds the body width */
+    }
+
+    /**/
+    #container {
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+
+    #div1 {
+      flex: 0 0 200px; /* Fix width to 200px */
+      min-width: 200px; /* Set minimum width */
+      max-width: 200px; /* Set maximum width */
+      overflow-x: hidden; /* Hide horizontal overflow */
+      display: flex;
+      flex-direction: column;
+      background-color: beige;
+      padding: 20px;
+    }
+
+    #div2 {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: beige;
+      padding: 20px;
+    }
+
+    #gl-canvas {
+      width: 800;
+      height: 800;
+      border: 1px solid black;
+    }
+
+  </style>
+<script id="vertex-shader" type="x-shader/x-vertex">
+  attribute vec4 vPosition;
+  attribute vec4 vColor;
+
+  uniform float xTransform;
+  uniform float yTransform;
+  uniform float zoom;
+  
+  varying vec4 fColor;
+  
+  void main() {
+      // Apply transformations
+      vec4 transformedPosition = vPosition + vec4(xTransform, yTransform, 0.0, 0.0);
+      transformedPosition.x *= zoom;
+      transformedPosition.y *= zoom;
+        
+      // Set the final position
+      gl_Position = transformedPosition;
+      gl_PointSize = 10.0; // Example point size, adjust as needed
+
+      fColor = vColor;
+
+  }
+  </script>
+<script id="fragment-shader" type="x-shader/x-fragment">
+  precision mediump float;
+
+  uniform vec4 uColor; // Uniform color value
+  
+  const vec4 defaultColor = vec4(0.0, 0.0, 0.0, 1.0); // Default color (red)
+  
+  void main(){
+      vec4 finalColor = uColor != vec4(0.0) ? uColor : defaultColor; // If uColor is not set, use defaultColor
+      gl_FragColor = finalColor;
+  }
+</script>
+
+</head>
+<body id="body-style">
+  <div id="container">
+    <div id="div1">
+        <label for="n-value">Enter n value:</label>
+        <input type="number" id="n-value" name="n-value" min="1" step="1" value = "20">
+        <div>
+          <input type="checkbox" id="add-points-checkbox">
+          <label for="add-points-checkbox">Enable adding new points</label>
+        </div>
+        <br><br>
+        <label for="distribution-select">Select distribution:</label>
+        <select id="distribution-select" name="distribution-select">
+            <option value="gaussian">Gaussian Distribution</option>
+            <option value="normal">Normal Distribution</option>
+        </select>
+        <br><br>
+        <button id="draw-button">Draw</button>
+        
+        <br><br><br>
+        <label for="algorithm-select">Select Algorithm</label>
+        <select id="algorithm-select" name="algorithm-select">
+          <option value="grahams-scan">Graham's Scan</option>
+          <option value="gift-wrap">Gift Wrap</option>
+          <option value="quick-hull">Quick Hull</option>
+          <option value="merge-hull">Merge Hull</option>
+        </select>
+        <br><br>
+        <button id="calculate-hull-button">Calculate Hull</button>
+        <br><br>
+        <label for="animation-speed-label">Animation frame speed(ms):</label>
+        <input type="number" id="animation-speed" name="framerate" min="10" step="10" value = "100">
+        <br>
+        <button id="animate-hull-button">Animate Hull</button>
+        <br><br>
+        <button id="reset-button">Reset</button>
+    </div>
+
+    <div id="canvas-container">
+      <canvas id="gl-canvas" width="800" height="800" style="border: 1px solid black;">
+        Oops ... your browser doesn't support the HTML5 canvas element
+      </canvas>
+    </div>
+
+    <div id="div2">
+      <p>Algorithm: <span id="algorithm-info"></span></p>
+      <p>N: <span id="n-info"></span></p>
+      <p>Time Elapsed: <span id="time-info"></span></p>
+      <a href="https://github.com/Bilgehansandikci/CS478-Project" target="_blank">GitHub</a>
+    </div>
+  </div>
+
+</body>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+
+<script type="text/javascript" src="UtilityFunctions.js"></script>
+<script type="text/javascript" src="main.js"></script>
+</html>
+
+
+
