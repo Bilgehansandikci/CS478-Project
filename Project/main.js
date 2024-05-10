@@ -224,6 +224,11 @@ function renderPoints(){
 //Create points by using n value and distribution type
 function createPoints() {
     var n = parseInt(document.getElementById("n-value").value);
+
+    var l = parseFloat(document.getElementById("pointSize").value);
+    var sizeLoc = gl.getUniformLocation(program, "size");
+    gl.uniform1f(sizeLoc, l);
+
     nValue = n;
 
     if (isNaN(n) || n < 0) {
@@ -411,6 +416,14 @@ async function giftWrap(){
 
 //Graham's scan algorithm: selects the average of first three points, then sorts points by angle to that point in DLL. then performs grahams scan in a little modified manner to help with animating the algorithm
 async function grahamsScan(points) {
+    let hull = [];
+    
+    //base case
+    if(!points || points.length <= 3){
+        hull = points;
+        return hull;
+    }
+
     //Select interior point
     let p = vec2((points[0][0] + points[1][0] + points[2][0]) / 3.0, (points[0][1] + points[1][1] + points[2][1]) / 3.0 );
 
@@ -440,7 +453,7 @@ async function grahamsScan(points) {
     let head = buildDoublyLinkedList(rotatedPoints);   
 
     //Scan
-    let hull = [];
+    // let hull = [];
 
     let curPoint = head;
     let start = head;
@@ -606,16 +619,19 @@ async function quickHull(S = null, p1 = null, p2 = null){
 //Mergehull algorithm
 async function mergeHull(S, direction = 0){
 
-    //Animation
-    if(reset){
-        return;
-    }
-    if(animationFlag){
-        await sleep(animationTime);
+    // //Animation
+    // if(reset){
+    //     return;
+    // }
+    // if(animationFlag){
+    //     await sleep(animationTime);
 
-        animPoints = S;
-        render();
-    }
+    //     lettempHull
+    //     animation = [tempHull];
+    //     drawColor = [colors.orange];
+    //     animPoints = S;
+    //     render();
+    // }
 
     //Base case
     if(!S){
@@ -633,25 +649,25 @@ async function mergeHull(S, direction = 0){
 
     let newDir = direction === 0 ? 1 : 0;   //Change direction
 
-    //Sort
-    if(direction === 1){
-        S.sort(function(a, b) {
-            if (a[0] !== b[0]) {
-                return a[0] - b[0]; // Sort by x-coordinate first
-            } else {
-                return a[1] - b[1]; // If x-coordinates are equal, sort by y-coordinate
-            }
-        });    //sort by x then y
-    }
-    else{
-        S.sort(function(a, b) {
-            if (a[1] !== b[1]) {
-                return a[1] - b[1]; // Sort by y-coordinate first
-            } else {
-                return a[0] - b[0]; // If y-coordinates are equal, sort by x-coordinate
-            }
-        });    //sort by y then x
-    }
+    // //Sort
+    // if(direction === 1){
+    //     S.sort(function(a, b) {
+    //         if (a[0] !== b[0]) {
+    //             return a[0] - b[0]; // Sort by x-coordinate first
+    //         } else {
+    //             return a[1] - b[1]; // If x-coordinates are equal, sort by y-coordinate
+    //         }
+    //     });    //sort by x then y
+    // }
+    // else{
+    //     S.sort(function(a, b) {
+    //         if (a[1] !== b[1]) {
+    //             return a[1] - b[1]; // Sort by y-coordinate first
+    //         } else {
+    //             return a[0] - b[0]; // If y-coordinates are equal, sort by x-coordinate
+    //         }
+    //     });    //sort by y then x
+    // }
 
     //Cut S into half and recursively pass
     let middleIndex = Math.floor(S.length / 2);
@@ -672,12 +688,12 @@ async function mergeHull(S, direction = 0){
         return;
     }
     if(animationFlag){
-        //await sleep(animationTime);
+        await sleep(animationTime);
 
         tempHull.push(tempHull[0])
         animation = [tempHull];
-        drawColor = [colors.orange];
-        animPoints = S;
+        drawColor = [colors.blue];
+        animPoints = hullL.slice();
         render();
     }
     tempHull = [];
@@ -693,12 +709,12 @@ async function mergeHull(S, direction = 0){
         return;
     }
     if(animationFlag){
-        //await sleep(animationTime);
+        await sleep(animationTime);
 
         tempHull.push(tempHull[0])
         animation = [tempHull];
-        drawColor = [colors.orange];
-        animPoints = S;
+        drawColor = [colors.blue];
+        animPoints = hullR.slice();
         render();
     }
     tempHull = [];
